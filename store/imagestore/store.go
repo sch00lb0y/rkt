@@ -44,6 +44,7 @@ import (
 const (
 	blobType int64 = iota
 	imageManifestType
+	OCIImageConfig
 
 	defaultPathPerm = os.FileMode(0770 | os.ModeSetgid)
 	defaultFilePerm = os.FileMode(0660)
@@ -63,6 +64,7 @@ const (
 var diskvStores = [...]string{
 	"blob",
 	"imageManifest",
+	"OCIImageConfig",
 }
 
 var (
