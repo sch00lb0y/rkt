@@ -38,13 +38,14 @@ import (
 	"github.com/appc/spec/schema/types"
 
 	"github.com/hashicorp/errwrap"
+	ocispec "github.com/opencontainers/image-spec/specs-go/v1"
 	"github.com/peterbourgon/diskv"
 )
 
 const (
 	blobType int64 = iota
 	imageManifestType
-	OCIImageConfig
+	OCIImageConfigType
 
 	defaultPathPerm = os.FileMode(0770 | os.ModeSetgid)
 	defaultFilePerm = os.FileMode(0660)
@@ -423,6 +424,18 @@ func (s *Store) ReadStream(key string) (io.ReadCloser, error) {
 	}
 
 	return s.stores[blobType].ReadStream(key, false)
+}
+
+func (s *Store) WriteOCIManifestAndConfig(imgManifest ocispec.Manifest, imgConfigBlob []byte, url string) (string, error) {
+	h := sha512.New()
+	encodedManifest, err := json.Marshal(imgManifest)
+	if err != nil {
+		return "", errwrap.Wrap(errors.New("unable to encode the image manifest"), err)
+	}
+	key := s.HashToKey(h)
+	s.stores[imageManifestType].Write(key, encodedManifest)
+	s.stores[OCIImageConfigType].Write(key, imgConfigBlob)
+	return key, nil
 }
 
 // WriteACI takes an ACI encapsulated in an io.Reader, decompresses it if

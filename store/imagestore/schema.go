@@ -40,6 +40,11 @@ var dbCreateStmts = [...]string{
 	"CREATE TABLE IF NOT EXISTS aciinfo (blobkey string, name string, importtime time, lastused time, latest bool, size int64 DEFAULT 0, treestoresize int64 DEFAULT 0);",
 	"CREATE UNIQUE INDEX IF NOT EXISTS blobkeyidx ON aciinfo (blobkey)",
 	"CREATE INDEX IF NOT EXISTS nameidx ON aciinfo (name)",
+
+	// ociinfo table. The primary key is "blobkey" and it matches the key used to save that aci in the blob store
+	"CREATE TABLE IF NOT EXISTS ociinfo (blobkey string, name string, importtime time, lastused time, latest bool);",
+	"CREATE UNIQUE INDEX IF NOT EXISTS ociblobkeyidx ON ociinfo (blobkey)",
+	"CREATE INDEX IF NOT EXISTS ocinameidx ON ociinfo (name)",
 }
 
 // dbIsPopulated checks if the db is already populated (at any version) verifing if the "version" table exists

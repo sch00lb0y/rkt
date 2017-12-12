@@ -76,7 +76,7 @@ func (f *dockerFetcher) fetchImageFrom(u *url.URL, latest bool) (string, error) 
 	if err != nil {
 		return nil, errwrap.Wrap(errors.New("error to get the docker image config blob"), err)
 	}
-	hash, err := f.S.WriteOCIManifestAndConfig(imgManifest, imgConfigBlob)
+	hash, err := f.S.WriteOCIManifestAndConfig(imgManifest, imgConfigBlob, u.String())
 	return hash, err
 }
 
