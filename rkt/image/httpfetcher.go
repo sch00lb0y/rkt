@@ -17,6 +17,7 @@ package image
 import (
 	"errors"
 	"io"
+	"log"
 	"net/url"
 	"time"
 

@@ -17,6 +17,7 @@ package image
 import (
 	"errors"
 	"fmt"
+	"log"
 	"os"
 	"path/filepath"
 
